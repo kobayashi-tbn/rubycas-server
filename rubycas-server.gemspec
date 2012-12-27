@@ -17,8 +17,8 @@ $gemspec = Gem::Specification.new do |s|
 
   s.test_files = `git ls-files -- spec`.split("\n")
 
-  s.executables = ["rubycas-server"]
-  s.bindir = "bin"
+  #s.executables = ["rubycas-server"]
+  #s.bindir = "bin"
   s.require_path = "lib"
 
   s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.md"]
