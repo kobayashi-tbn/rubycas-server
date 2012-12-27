@@ -256,21 +256,21 @@ module CASServer
     def self.init_database!
 
       unless config[:disable_auto_migrations]
-        #ActiveRecord::Base.establish_connection(config[:database])
+        ActiveRecord::Base.establish_connection(config[:database])
         # see https://devcenter.heroku.com/articles/rack#database-access
-        require 'uri'
-        #db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
-        db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:postgres@localhost/casserver')
-
-        ActiveRecord::Base.establish_connection(
-            :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
-            :host     => db.host,
-            :port     => db.port,
-            :username => db.user,
-            :password => db.password,
-            :database => db.path[1..-1],
-            :encoding => 'utf8'
-        )
+        #require 'uri'
+        ##db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+        #db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:postgres@localhost/casserver')
+        #
+        #ActiveRecord::Base.establish_connection(
+        #    :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+        #    :host     => db.host,
+        #    :port     => db.port,
+        #    :username => db.user,
+        #    :password => db.password,
+        #    :database => db.path[1..-1],
+        #    :encoding => 'utf8'
+        #)
         print_cli_message "Running migrations to make sure your database schema is up to date..."
         prev_db_log = ActiveRecord::Base.logger
         ActiveRecord::Base.logger = Logger.new(STDOUT)
@@ -280,21 +280,21 @@ module CASServer
         print_cli_message "Your database is now up to date."
       end
 
-      #ActiveRecord::Base.establish_connection(config[:database])
+      ActiveRecord::Base.establish_connection(config[:database])
       # see https://devcenter.heroku.com/articles/rack#database-access
-      require 'uri'
-      #db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
-      db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:postgres@localhost/casserver')
-
-      ActiveRecord::Base.establish_connection(
-          :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
-          :host     => db.host,
-          :port     => db.port,
-          :username => db.user,
-          :password => db.password,
-          :database => db.path[1..-1],
-          :encoding => 'utf8'
-      )
+      #require 'uri'
+      ##db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+      #db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:postgres@localhost/casserver')
+      #
+      #ActiveRecord::Base.establish_connection(
+      #    :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+      #    :host     => db.host,
+      #    :port     => db.port,
+      #    :username => db.user,
+      #    :password => db.password,
+      #    :database => db.path[1..-1],
+      #    :encoding => 'utf8'
+      #)
     end
 
     configure do

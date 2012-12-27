@@ -98,13 +98,14 @@ server: webrick
 # (be sure to create the casserver database in MySQL beforehand,
 #   i.e. `mysqladmin -u root create casserver`)
 
+<% db = ENV['_URL'].scan(/(.+):\/\/(.*):(.+)@(.+):(\d*)\/(.*)/)[0] %>
 database:
 #  adapter: mysql
   adapter: postgresql
-  database: casserver
-  username: postgres
-  password: postgres
-  host: localhost
+  database: <%= db[5] %>
+  username: <%= db[1] %>
+  password: <%= db[2] %>
+  host: <%= db[3] %>
   reconnect: true
 
 # IMPORTANT! By default, the server can handle up to ~5 concurrent requests
@@ -166,15 +167,16 @@ database:
 #
 # Example:
 #
-<% db = ENV['AUTH_DB_URL'].scan(/(.+):\/\/(.*):(.+)@(.+):(\d*)\/(.*)/)[0] %>
+
+<% auth_db = ENV['AUTH_DB_URL'].scan(/(.+):\/\/(.*):(.+)@(.+):(\d*)\/(.*)/)[0] %>
 authenticator:
   class: CASServer::Authenticators::SQLBcrypt
   database:
     adapter: postgresql
-    database: <%= db[5] %>
-    username: <%= db[1] %>
-    password: <%= db[2] %>
-    host: <%= db[3] %>
+    database: <%= auth_db[5] %>
+    username: <%= auth_db[1] %>
+    password: <%= auth_db[2] %>
+    host: <%= auth_db[3] %>
   user_table: users
   username_column: username
   password_column: encrypted_password
