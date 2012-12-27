@@ -16,5 +16,4 @@ custom/*
 resources/dev
 .rvmrc
 .bundle
-.vagrant
-Vagrantfile
+vendor/bundle

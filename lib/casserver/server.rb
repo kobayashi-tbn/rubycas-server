@@ -132,14 +132,16 @@ module CASServer
         raise e
       end
 
-      config.merge! HashWithIndifferentAccess.new(YAML.load(config_file))
+      require 'erb'
+      config.merge! HashWithIndifferentAccess.new(YAML.load(ERB.new(IO.read(config_file)).result))
       set :server, config[:server] || 'webrick'
     end
 
     def self.handler_options
       handler_options = {
         :Host => bind || config[:bind_address],
-        :Port => config[:port] || 443
+        #:Port => config[:port] || 443
+        :Port => config[:port] || ENV['PORT'] || 443
       }
 
       handler_options.merge(handler_ssl_options).to_hash.symbolize_keys!
@@ -254,7 +256,21 @@ module CASServer
     def self.init_database!
 
       unless config[:disable_auto_migrations]
-        ActiveRecord::Base.establish_connection(config[:database])
+        #ActiveRecord::Base.establish_connection(config[:database])
+        # see https://devcenter.heroku.com/articles/rack#database-access
+        require 'uri'
+        #db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+        db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:postgres@localhost/casserver')
+
+        ActiveRecord::Base.establish_connection(
+            :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+            :host     => db.host,
+            :port     => db.port,
+            :username => db.user,
+            :password => db.password,
+            :database => db.path[1..-1],
+            :encoding => 'utf8'
+        )
         print_cli_message "Running migrations to make sure your database schema is up to date..."
         prev_db_log = ActiveRecord::Base.logger
         ActiveRecord::Base.logger = Logger.new(STDOUT)
@@ -264,7 +280,21 @@ module CASServer
         print_cli_message "Your database is now up to date."
       end
 
-      ActiveRecord::Base.establish_connection(config[:database])
+      #ActiveRecord::Base.establish_connection(config[:database])
+      # see https://devcenter.heroku.com/articles/rack#database-access
+      require 'uri'
+      #db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+      db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:postgres@localhost/casserver')
+
+      ActiveRecord::Base.establish_connection(
+          :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+          :host     => db.host,
+          :port     => db.port,
+          :username => db.user,
+          :password => db.password,
+          :database => db.path[1..-1],
+          :encoding => 'utf8'
+      )
     end
 
     configure do

@@ -16,3 +16,5 @@ CASServer::Authenticators.autoload :SQL, 'casserver/authenticators/sql.rb'
 CASServer::Authenticators.autoload :Google, 'casserver/authenticators/google.rb'
 CASServer::Authenticators.autoload :SQLEncrypted, 'lib/casserver/authenticators/sql_encrypted.rb'
 CASServer::Authenticators.autoload :ActiveResource, 'casserver/authenticators/active_resource.rb'
+
+
